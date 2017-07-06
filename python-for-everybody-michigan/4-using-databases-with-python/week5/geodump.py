@@ -6,11 +6,11 @@ conn = sqlite3.connect('geodata.sqlite')
 cur = conn.cursor()
 
 cur.execute('SELECT * FROM Locations')
-fhand = codecs.open('where.js', 'w', "utf-8")
+fhand = codecs.open('where.js','w', "utf-8")
 fhand.write("myData = [\n")
 count = 0
 for row in cur :
-    data = str(row[1].decode())
+    data = str(row[1])
     try: js = json.loads(str(data))
     except: continue
 
@@ -20,7 +20,7 @@ for row in cur :
     lng = js["results"][0]["geometry"]["location"]["lng"]
     if lat == 0 or lng == 0 : continue
     where = js['results'][0]['formatted_address']
-    where = where.replace("'", "")
+    where = where.replace("'","")
     try :
         print(where, lat, lng)
 
@@ -36,4 +36,3 @@ cur.close()
 fhand.close()
 print(count, "records written to where.js")
 print("Open where.html to view the data in a browser")
-
